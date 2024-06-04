@@ -15,35 +15,35 @@ using namespace dvsku;
 ///////////////////////////////////////////////////////////////////////////////
 // LOG
 
-void dv_util_log::init(const dv_util_log::settings& settings) {
+void util_log::init(const util_log::settings& settings) {
     if (m_impl) return;
 
-    m_impl = std::make_unique<dv_util_log::impl>();
+    m_impl = std::make_unique<util_log::impl>();
     m_impl->settings = settings;
 }
 
-void dv_util_log::create_source(const std::string& name, std::ostream* stream) {
+void util_log::create_source(const std::string& name, std::ostream* stream) {
     if (!m_impl)                        return;
     if (m_impl->sources.contains(name)) return;
 
     m_impl->sources.insert({ name, { true, stream } });
 }
 
-void dv_util_log::remove_source(const std::string& name) {
+void util_log::remove_source(const std::string& name) {
     if (!m_impl)                         return;
     if (!m_impl->sources.contains(name)) return;
 
     m_impl->sources.erase(name);
 }
 
-dv_util_log::source* dv_util_log::get_source(const std::string& name) {
+util_log::source* util_log::get_source(const std::string& name) {
     if (!m_impl)                         return nullptr;
     if (!m_impl->sources.contains(name)) return nullptr;
 
     return &m_impl->sources[name];
 }
 
-dv_util_log::settings* dv_util_log::get_settings() {
+util_log::settings* util_log::get_settings() {
     if (!m_impl) return nullptr;
     return &m_impl->settings;
 }
@@ -51,7 +51,7 @@ dv_util_log::settings* dv_util_log::get_settings() {
 ///////////////////////////////////////////////////////////////////////////////
 // LOG IMPL
 
-void dv_util_log::impl::log_to_sources(const std::string& message) const {
+void util_log::impl::log_to_sources(const std::string& message) const {
     for (auto& [name, source] : sources) {
         if (!source.enabled || !source.stream)
             continue;
@@ -72,11 +72,11 @@ void dv_util_log::impl::log_to_sources(const std::string& message) const {
     }
 }
 
-void dv_util_log::impl::log_to_file(const std::string& message) const {
+void util_log::impl::log_to_file(const std::string& message) const {
     if (!settings.log_to_file) return;
 
     try {
-        auto localtime = dv_util_datetime::localtime_now();
+        auto localtime = util_datetime::localtime_now();
 
         std::string filename_format = settings.log_file_name;
         filename_format.append("_");

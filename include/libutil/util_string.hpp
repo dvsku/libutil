@@ -9,10 +9,10 @@
 namespace dvsku {
     #ifndef DV_FORMAT
         #define DV_FORMAT(frmt, ...)    \
-            dvsku::dv_util_string::format(frmt, ##__VA_ARGS__)
+            dvsku::util_string::format(frmt, ##__VA_ARGS__)
     #endif
 
-    class dv_util_string {
+    class util_string {
     public:
         using string_view_t = fmt::string_view;
 

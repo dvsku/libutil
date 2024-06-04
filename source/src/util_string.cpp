@@ -2,7 +2,7 @@
 
 using namespace dvsku;
 
-std::vector<std::string> dv_util_string::split(const std::string str, const char delimiter) {
+std::vector<std::string> util_string::split(const std::string str, const char delimiter) {
     std::vector<std::string> results;
     std::string::size_type   prev_pos = 0;
     std::string::size_type   pos      = 0;
@@ -16,7 +16,7 @@ std::vector<std::string> dv_util_string::split(const std::string str, const char
     return results;
 }
 
-std::string dv_util_string::trim(const std::string& str, const std::string& to_remove) {
+std::string util_string::trim(const std::string& str, const std::string& to_remove) {
     if (str.empty()) return str;
 
     size_t start = 0;
@@ -32,7 +32,7 @@ std::string dv_util_string::trim(const std::string& str, const std::string& to_r
     return str.substr(start, end - start);
 }
 
-std::string dv_util_string::replace(const std::string& source, const std::string& what, const std::string& with) {
+std::string util_string::replace(const std::string& source, const std::string& what, const std::string& with) {
     std::string replaced = source;
 
     size_t start = 0;
@@ -44,6 +44,6 @@ std::string dv_util_string::replace(const std::string& source, const std::string
     return replaced;
 }
 
-bool dv_util_string::contains(const std::string& haystack, const std::string& needle) {
+bool util_string::contains(const std::string& haystack, const std::string& needle) {
     return haystack.find(needle) != std::string::npos;
 }

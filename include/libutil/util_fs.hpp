@@ -4,7 +4,7 @@
 #include <filesystem>
 
 namespace dvsku {
-    class dv_util_fs {
+    class util_fs {
     public:
         /*
             Check if a sub path is part of a path

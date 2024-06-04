@@ -7,7 +7,7 @@
 
 using namespace dvsku;
 
-std::string dv_util_system::get_executable_file_path() {
+std::string util_system::get_executable_file_path() {
 #ifdef DV_OS_WINDOWS
     CHAR  filename[1024];
     DWORD filename_size = RTL_NUMBER_OF(filename);
