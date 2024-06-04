@@ -1,7 +1,7 @@
-#include "dv_utilities/dv_util_log.hpp"
-#include "dv_utilities/dv_util_datetime.hpp"
-#include "dv_utilities/dv_util_string.hpp"
-#include "dv_utilities/dv_config.hpp"
+#include "libutil/util_log.hpp"
+#include "libutil/util_datetime.hpp"
+#include "libutil/util_string.hpp"
+#include "libutil/config.hpp"
 
 #ifdef DV_OS_WINDOWS
     #include <windows.h>

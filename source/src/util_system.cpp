@@ -1,5 +1,5 @@
-#include "dv_utilities/dv_util_system.hpp"
-#include "dv_utilities/dv_config.hpp"
+#include "libutil/util_system.hpp"
+#include "libutil/config.hpp"
 
 #ifdef DV_OS_WINDOWS
     #include <windows.h>
