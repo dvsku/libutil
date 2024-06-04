@@ -6,7 +6,7 @@ SET(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 ###############################################################################
 ## googletest
 
-IF(LIBUTIL_TEST)
+IF(LIBUTIL_TOP_LEVEL AND LIBUTIL_TEST)
     SET(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
     FetchContent_Declare(
