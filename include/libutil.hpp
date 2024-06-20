@@ -1,5 +1,8 @@
 #pragma once
 
+#include "libutil/models/result.hpp"
+#include "libutil/models/async_result.hpp"
+
 #include "libutil/util_string.hpp"
 #include "libutil/util_log.hpp"
 #include "libutil/util_datetime.hpp"
