@@ -12,6 +12,16 @@ TEST(string, format) {
     EXPECT_TRUE(valid == formatted);
 }
 
+TEST(string, format_to) {
+    std::string valid = "Hello, dvsku. January has 31 days.";
+    std::string fmt = "Hello, {}. January has {} days.";
+    std::string formatted = "";
+
+    DV_FORMAT_TO(formatted, fmt, "dvsku", 31);
+
+    EXPECT_TRUE(valid == formatted);
+}
+
 TEST(string, split) {
     std::string str   = "I|am|dvsku";
     auto        split = util_string::split(str, '|');

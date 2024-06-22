@@ -8,8 +8,13 @@
 
 namespace dvsku {
     #ifndef DV_FORMAT
-        #define DV_FORMAT(frmt, ...)    \
-            dvsku::util_string::format(frmt, ##__VA_ARGS__)
+    #define DV_FORMAT(frmt, ...)            \
+        dvsku::util_string::format(frmt, ##__VA_ARGS__)
+    #endif
+
+    #ifndef DV_FORMAT_TO
+    #define DV_FORMAT_TO(str, frmt, ...)    \
+        dvsku::util_string::format_to(str, frmt, ##__VA_ARGS__)
     #endif
 
     class util_string {
@@ -22,6 +27,11 @@ namespace dvsku {
         template<typename... Targs>
         static std::string format(string_view_t format, Targs&&... args) {
             return fmt::format(fmt::runtime(format), args...);
+        }
+
+        template<typename... Targs>
+        static void format_to(std::string& str, string_view_t format, Targs&&... args) {
+            fmt::format_to(std::back_inserter(str), fmt::runtime(format), args...);
         }
 
         /*
