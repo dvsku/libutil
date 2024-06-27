@@ -1,5 +1,6 @@
 #pragma once
 
+#include "libutil/env/assert.hpp"
 #include "libutil/util_string.hpp"
 #include "libutil/util_datetime.hpp"
 
@@ -9,6 +10,8 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
+#include <atomic>
+#include <mutex>
 
 #ifndef DV_LOG_INFO
 #define DV_LOG_INFO(component, frmt, ...)     \
@@ -60,6 +63,11 @@ namespace dvsku {
             log::level level = log::level::error;
             
             /*
+                Log to console?
+            */
+            bool log_to_console = true;
+
+            /*
                 Log to file?
             */
             bool log_to_file = false;
@@ -86,42 +94,82 @@ namespace dvsku {
             std::string log_files_dir = "logs";
         };
 
-        struct source {
+        struct stream {
             /*
-                Log to source?
+                Log to stream?
             */
             bool enabled = true;
 
             /*
-                Source stream
+                Stream
             */
-            std::ostream* stream = nullptr;
+            std::stringstream stream;
         };
 
     public:
         static void init(const log::settings& settings);
 
-        static                   void create_source(const std::string& name, std::ostream* stream);
-        static                   void remove_source(const std::string& name);
-        static   log::source* get_source(const std::string& name);
+        /*
+            Pause logging.
+        */
+        static void pause();
+
+        /*
+            Resume logging.
+        */
+        static void resume();
+
+        /*
+            Create a stream to log into.
+        */
+        static void create_stream(const std::string& name);
+
+        /*
+            Remove stream.
+        */
+        static void remove_stream(const std::string& name);
+
+        /*
+            Enable/disable stream.
+        */
+        static void update_stream_state(const std::string& name, bool enabled);
+
+        /*
+            Clear stream.
+        */
+        static void clear_stream(const std::string& name);
+
+        /*
+            Get stream content.
+        */
+        static std::string get_stream_content(const std::string& name);
+
+        /*
+            Get log settings.
+            Log must be paused before changing settings.
+        */
         static log::settings* get_settings();
 
         template<typename... Targs>
         static void log_message(log::level level, const std::string& component,
             string_view_t format, Targs&&... args)
         {
-            if (!m_impl)                        return;
+            LIBUTIL_ASSERT(m_impl, "Log not initialized.");
+
+            if (!m_running)                     return;
             if (m_impl->settings.level < level) return;
 
-            bool log_to_sources = false;
-            for (auto& [name, source] : m_impl->sources) {
-                if (source.enabled) {
-                    log_to_sources = true;
+            std::lock_guard guard(m_mutex);
+
+            bool log_to_streams = false;
+            for (auto& [name, map_stream] : m_impl->streams) {
+                if (map_stream.enabled) {
+                    log_to_streams = true;
                     break;
                 }
             }
 
-            if (!m_impl->settings.log_to_file && !log_to_sources)
+            if (!m_impl->settings.log_to_file && !m_impl->settings.log_to_console && !log_to_streams)
                 return;
 
             std::stringstream ss;
@@ -145,7 +193,7 @@ namespace dvsku {
 
             std::string message = ss.str();
 
-            m_impl->log_to_sources(message);
+            m_impl->log_to_streams(message);
             m_impl->log_to_file(message);
         }
 
@@ -153,10 +201,10 @@ namespace dvsku {
         class impl {
         public:
             log::settings                                settings{};
-            std::unordered_map<std::string, log::source> sources{};
+            std::unordered_map<std::string, log::stream> streams{};
 
         public:
-            void log_to_sources(const std::string& message) const;
+            void log_to_streams(const std::string& message);
             void log_to_file(const std::string& message) const;
         };
 
@@ -170,6 +218,8 @@ namespace dvsku {
             {"DEBG"}
         };
 
-        inline static std::unique_ptr<log::impl> m_impl = nullptr;
+        inline static std::unique_ptr<log::impl> m_impl    = nullptr;
+        inline static std::atomic_bool           m_running = false;
+        inline static std::mutex                 m_mutex;
     };
 }

@@ -20,56 +20,103 @@ void log::init(const log::settings& settings) {
 
     m_impl = std::make_unique<log::impl>();
     m_impl->settings = settings;
+
+    resume();
 }
 
-void log::create_source(const std::string& name, std::ostream* stream) {
-    if (!m_impl)                        return;
-    if (m_impl->sources.contains(name)) return;
-
-    m_impl->sources.insert({ name, { true, stream } });
+void log::pause() {
+    m_running = false;
 }
 
-void log::remove_source(const std::string& name) {
-    if (!m_impl)                         return;
-    if (!m_impl->sources.contains(name)) return;
-
-    m_impl->sources.erase(name);
+void log::resume() {
+    m_running = true;
 }
 
-log::source* log::get_source(const std::string& name) {
-    if (!m_impl)                         return nullptr;
-    if (!m_impl->sources.contains(name)) return nullptr;
+void log::create_stream(const std::string& name) {
+    LIBUTIL_ASSERT(m_impl, "Log not initialized.");
+    
+    std::lock_guard guard(m_mutex);
 
-    return &m_impl->sources[name];
+    if (m_impl->streams.contains(name))
+        return;
+
+    m_impl->streams.insert({ name, log::stream() });
+}
+
+void log::remove_stream(const std::string& name) {
+    LIBUTIL_ASSERT(m_impl, "Log not initialized.");
+    
+    std::lock_guard guard(m_mutex);
+
+    if (!m_impl->streams.contains(name))
+        return;
+
+    m_impl->streams.erase(name);
+}
+
+void log::update_stream_state(const std::string& name, bool enabled) {
+    LIBUTIL_ASSERT(m_impl, "Log not initialized.");
+
+    std::lock_guard guard(m_mutex);
+
+    if (!m_impl->streams.contains(name))
+        return;
+
+    m_impl->streams[name].enabled = enabled;
+}
+
+void log::clear_stream(const std::string& name) {
+    LIBUTIL_ASSERT(m_impl, "Log not initialized.");
+
+    std::lock_guard guard(m_mutex);
+
+    if (!m_impl->streams.contains(name))
+        return;
+
+    m_impl->streams[name].stream.str(std::string());
+}
+
+std::string log::get_stream_content(const std::string& name) {
+    LIBUTIL_ASSERT(m_impl, "Log not initialized.");
+
+    std::lock_guard guard(m_mutex);
+
+    if (!m_impl->streams.contains(name))
+        return "";
+
+    return m_impl->streams[name].stream.str();
 }
 
 log::settings* log::get_settings() {
-    if (!m_impl) return nullptr;
+    LIBUTIL_ASSERT(m_impl,     "Log not initialized.");
+    LIBUTIL_ASSERT(!m_running, "Log not paused.");
+
     return &m_impl->settings;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // LOG IMPL
 
-void log::impl::log_to_sources(const std::string& message) const {
-    for (auto& [name, source] : sources) {
-        if (!source.enabled || !source.stream)
+void log::impl::log_to_streams(const std::string& message) {
+    for (auto& [name, map_stream] : streams) {
+        if (!map_stream.enabled || !map_stream.stream)
             continue;
 
-    #ifdef DV_OS_WINDOWS
-        if (source.stream == &std::cout) {
-            auto handle = GetStdHandle(STD_OUTPUT_HANDLE);
-            
-            if (handle) {
-                WriteConsole(handle, message.data(), (DWORD)message.size(), NULL, NULL);
-            }
-
-            return;
-        }
-    #endif  
-
-        (*source.stream) << message;
+        map_stream.stream << message;
     }
+
+    if (!m_impl->settings.log_to_console)
+        return;
+
+#ifdef DV_OS_WINDOWS
+    auto handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    
+    if (handle) {
+        WriteConsole(handle, message.data(), (DWORD)message.size(), NULL, NULL);
+    }
+#else
+    std::cout << message;
+#endif  
 }
 
 void log::impl::log_to_file(const std::string& message) const {
