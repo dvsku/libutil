@@ -12,31 +12,31 @@
 
 #ifndef DV_LOG_INFO
 #define DV_LOG_INFO(component, frmt, ...)     \
-        dvsku::util_log::log_message(dvsku::util_log::level::informational, component, frmt, ##__VA_ARGS__)
+        dvsku::log::log_message(dvsku::log::level::informational, component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_WARN
 #define DV_LOG_WARN(component, frmt, ...)     \
-        dvsku::util_log::log_message(dvsku::util_log::level::warning,       component, frmt, ##__VA_ARGS__)
+        dvsku::log::log_message(dvsku::log::level::warning,       component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_ERRO
 #define DV_LOG_ERRO(component, frmt, ...)     \
-        dvsku::util_log::log_message(dvsku::util_log::level::error,         component, frmt, ##__VA_ARGS__)
+        dvsku::log::log_message(dvsku::log::level::error,         component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_VERB
 #define DV_LOG_VERB(component, frmt, ...)     \
-        dvsku::util_log::log_message(dvsku::util_log::level::verbose,       component, frmt, ##__VA_ARGS__)
+        dvsku::log::log_message(dvsku::log::level::verbose,       component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_DEBG
 #define DV_LOG_DEBG(component, frmt, ...)     \
-        dvsku::util_log::log_message(dvsku::util_log::level::debug,         component, frmt, ##__VA_ARGS__)
+        dvsku::log::log_message(dvsku::log::level::debug,         component, frmt, ##__VA_ARGS__)
 #endif
 
 namespace dvsku {
-    class util_log {
+    class log {
     public:
         using string_view_t = fmt::string_view;
 
@@ -54,7 +54,7 @@ namespace dvsku {
             /*
                 Log level
             */
-            util_log::level level = util_log::level::error;
+            log::level level = log::level::error;
             
             /*
                 Log to file?
@@ -96,15 +96,15 @@ namespace dvsku {
         };
 
     public:
-        static void init(const util_log::settings& settings);
+        static void init(const log::settings& settings);
 
         static                   void create_source(const std::string& name, std::ostream* stream);
         static                   void remove_source(const std::string& name);
-        static   util_log::source* get_source(const std::string& name);
-        static util_log::settings* get_settings();
+        static   log::source* get_source(const std::string& name);
+        static log::settings* get_settings();
 
         template<typename... Targs>
-        static void log_message(util_log::level level, const std::string& component,
+        static void log_message(log::level level, const std::string& component,
             string_view_t format, Targs&&... args)
         {
             if (!m_impl)                        return;
@@ -149,8 +149,8 @@ namespace dvsku {
     private:
         class impl {
         public:
-            util_log::settings                                settings{};
-            std::unordered_map<std::string, util_log::source> sources{};
+            log::settings                                settings{};
+            std::unordered_map<std::string, log::source> sources{};
 
         public:
             void log_to_sources(const std::string& message) const;
@@ -167,6 +167,6 @@ namespace dvsku {
             {"DEBG"}
         };
 
-        inline static std::unique_ptr<util_log::impl> m_impl = nullptr;
+        inline static std::unique_ptr<log::impl> m_impl = nullptr;
     };
 }

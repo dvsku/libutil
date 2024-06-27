@@ -1,4 +1,4 @@
-#include "libutil/util_log.hpp"
+#include "libutil/log.hpp"
 #include "libutil/util_datetime.hpp"
 #include "libutil/util_string.hpp"
 #include "libutil/config.hpp"
@@ -15,35 +15,35 @@ using namespace dvsku;
 ///////////////////////////////////////////////////////////////////////////////
 // LOG
 
-void util_log::init(const util_log::settings& settings) {
+void log::init(const log::settings& settings) {
     if (m_impl) return;
 
-    m_impl = std::make_unique<util_log::impl>();
+    m_impl = std::make_unique<log::impl>();
     m_impl->settings = settings;
 }
 
-void util_log::create_source(const std::string& name, std::ostream* stream) {
+void log::create_source(const std::string& name, std::ostream* stream) {
     if (!m_impl)                        return;
     if (m_impl->sources.contains(name)) return;
 
     m_impl->sources.insert({ name, { true, stream } });
 }
 
-void util_log::remove_source(const std::string& name) {
+void log::remove_source(const std::string& name) {
     if (!m_impl)                         return;
     if (!m_impl->sources.contains(name)) return;
 
     m_impl->sources.erase(name);
 }
 
-util_log::source* util_log::get_source(const std::string& name) {
+log::source* log::get_source(const std::string& name) {
     if (!m_impl)                         return nullptr;
     if (!m_impl->sources.contains(name)) return nullptr;
 
     return &m_impl->sources[name];
 }
 
-util_log::settings* util_log::get_settings() {
+log::settings* log::get_settings() {
     if (!m_impl) return nullptr;
     return &m_impl->settings;
 }
@@ -51,7 +51,7 @@ util_log::settings* util_log::get_settings() {
 ///////////////////////////////////////////////////////////////////////////////
 // LOG IMPL
 
-void util_log::impl::log_to_sources(const std::string& message) const {
+void log::impl::log_to_sources(const std::string& message) const {
     for (auto& [name, source] : sources) {
         if (!source.enabled || !source.stream)
             continue;
@@ -72,7 +72,7 @@ void util_log::impl::log_to_sources(const std::string& message) const {
     }
 }
 
-void util_log::impl::log_to_file(const std::string& message) const {
+void log::impl::log_to_file(const std::string& message) const {
     if (!settings.log_to_file) return;
 
     try {

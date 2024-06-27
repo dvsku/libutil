@@ -19,16 +19,16 @@ static size_t get_line_count(const std::string& str) {
 
 TEST(log, message_to_sstream) {
     std::stringstream ss;
-    util_log::settings settings;
-    settings.level                        = util_log::level::debug;
+    log::settings settings;
+    settings.level                        = log::level::debug;
     settings.log_to_file                  = false;
     settings.log_message_timestamp_format = "";
     
-    util_log::init(settings);
-    util_log::create_source("sstream", &ss);
+    log::init(settings);
+    log::create_source("sstream", &ss);
     
     {
-        util_log::log_message(util_log::level::debug, "testing", "I am {}.", "dvsku");
+        log::log_message(log::level::debug, "testing", "I am {}.", "dvsku");
         std::string str = ss.str();
 
         EXPECT_TRUE(str != "");
@@ -38,7 +38,7 @@ TEST(log, message_to_sstream) {
     ss.str(std::string());
 
     {
-        util_log::log_message(util_log::level::debug, "", "I am {}.", "dvsku");
+        log::log_message(log::level::debug, "", "I am {}.", "dvsku");
         std::string str = ss.str();
 
         EXPECT_TRUE(str != "");
@@ -48,89 +48,89 @@ TEST(log, message_to_sstream) {
 
 TEST(log, levels) {
     std::stringstream ss;
-    util_log::settings settings;
-    settings.level       = util_log::level::none;
+    log::settings settings;
+    settings.level       = log::level::none;
     settings.log_to_file = false;
 
-    util_log::init(settings);
-    util_log::create_source("sstream", &ss);
+    log::init(settings);
+    log::create_source("sstream", &ss);
 
     {
-        util_log::log_message(util_log::level::informational, "", "");
-        util_log::log_message(util_log::level::warning, "", "");
-        util_log::log_message(util_log::level::error, "", "");
-        util_log::log_message(util_log::level::verbose, "", "");
-        util_log::log_message(util_log::level::debug, "", "");
+        log::log_message(log::level::informational, "", "");
+        log::log_message(log::level::warning, "", "");
+        log::log_message(log::level::error, "", "");
+        log::log_message(log::level::verbose, "", "");
+        log::log_message(log::level::debug, "", "");
 
         std::string str = ss.str();
         EXPECT_TRUE(get_line_count(str) == 0);
     }
 
     ss.str(std::string());
-    util_log::get_settings()->level = util_log::level::informational;
+    log::get_settings()->level = log::level::informational;
 
     {
-        util_log::log_message(util_log::level::informational, "", "");
-        util_log::log_message(util_log::level::warning, "", "");
-        util_log::log_message(util_log::level::error, "", "");
-        util_log::log_message(util_log::level::verbose, "", "");
-        util_log::log_message(util_log::level::debug, "", "");
+        log::log_message(log::level::informational, "", "");
+        log::log_message(log::level::warning, "", "");
+        log::log_message(log::level::error, "", "");
+        log::log_message(log::level::verbose, "", "");
+        log::log_message(log::level::debug, "", "");
 
         std::string str = ss.str();
         EXPECT_TRUE(get_line_count(str) == 1);
     }
 
     ss.str(std::string());
-    util_log::get_settings()->level = util_log::level::warning;
+    log::get_settings()->level = log::level::warning;
 
     {
-        util_log::log_message(util_log::level::informational, "", "");
-        util_log::log_message(util_log::level::warning, "", "");
-        util_log::log_message(util_log::level::error, "", "");
-        util_log::log_message(util_log::level::verbose, "", "");
-        util_log::log_message(util_log::level::debug, "", "");
+        log::log_message(log::level::informational, "", "");
+        log::log_message(log::level::warning, "", "");
+        log::log_message(log::level::error, "", "");
+        log::log_message(log::level::verbose, "", "");
+        log::log_message(log::level::debug, "", "");
 
         std::string str = ss.str();
         EXPECT_TRUE(get_line_count(str) == 2);
     }
 
     ss.str(std::string());
-    util_log::get_settings()->level = util_log::level::error;
+    log::get_settings()->level = log::level::error;
 
     {
-        util_log::log_message(util_log::level::informational, "", "");
-        util_log::log_message(util_log::level::warning, "", "");
-        util_log::log_message(util_log::level::error, "", "");
-        util_log::log_message(util_log::level::verbose, "", "");
-        util_log::log_message(util_log::level::debug, "", "");
+        log::log_message(log::level::informational, "", "");
+        log::log_message(log::level::warning, "", "");
+        log::log_message(log::level::error, "", "");
+        log::log_message(log::level::verbose, "", "");
+        log::log_message(log::level::debug, "", "");
 
         std::string str = ss.str();
         EXPECT_TRUE(get_line_count(str) == 3);
     }
 
     ss.str(std::string());
-    util_log::get_settings()->level = util_log::level::verbose;
+    log::get_settings()->level = log::level::verbose;
 
     {
-        util_log::log_message(util_log::level::informational, "", "");
-        util_log::log_message(util_log::level::warning, "", "");
-        util_log::log_message(util_log::level::error, "", "");
-        util_log::log_message(util_log::level::verbose, "", "");
-        util_log::log_message(util_log::level::debug, "", "");
+        log::log_message(log::level::informational, "", "");
+        log::log_message(log::level::warning, "", "");
+        log::log_message(log::level::error, "", "");
+        log::log_message(log::level::verbose, "", "");
+        log::log_message(log::level::debug, "", "");
 
         std::string str = ss.str();
         EXPECT_TRUE(get_line_count(str) == 4);
     }
 
     ss.str(std::string());
-    util_log::get_settings()->level = util_log::level::debug;
+    log::get_settings()->level = log::level::debug;
 
     {
-        util_log::log_message(util_log::level::informational, "", "");
-        util_log::log_message(util_log::level::warning, "", "");
-        util_log::log_message(util_log::level::error, "", "");
-        util_log::log_message(util_log::level::verbose, "", "");
-        util_log::log_message(util_log::level::debug, "", "");
+        log::log_message(log::level::informational, "", "");
+        log::log_message(log::level::warning, "", "");
+        log::log_message(log::level::error, "", "");
+        log::log_message(log::level::verbose, "", "");
+        log::log_message(log::level::debug, "", "");
 
         std::string str = ss.str();
         EXPECT_TRUE(get_line_count(str) == 5);
@@ -138,12 +138,12 @@ TEST(log, levels) {
 }
 
 TEST(log, log_file_create) {
-    util_log::settings settings;
-    settings.level       = util_log::level::informational;
+    log::settings settings;
+    settings.level       = log::level::informational;
     settings.log_to_file = true;
 
-    util_log::init(settings);   
-    util_log::log_message(util_log::level::informational, "", "");
+    log::init(settings);   
+    log::log_message(log::level::informational, "", "");
 
     auto localtime = util_datetime::localtime_now();
 
