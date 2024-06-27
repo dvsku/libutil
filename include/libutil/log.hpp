@@ -41,6 +41,9 @@ namespace dvsku {
         using string_view_t = fmt::string_view;
 
     public:
+        log() = delete;
+
+    public:
         enum class level : unsigned char {
             none          = 0x00,   // does not log
             informational = 0x01,   // logs only info
