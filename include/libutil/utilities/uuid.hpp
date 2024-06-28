@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdint>
 
-namespace dvsku {
+namespace libutil {
     using uuid = uint64_t;
 
     uuid create_uuid();

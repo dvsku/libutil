@@ -3,7 +3,7 @@
 #include <string>
 #include <filesystem>
 
-namespace dvsku::filesystem {
+namespace libutil::filesystem {
     /*
         Check if a sub path is part of a path
     */

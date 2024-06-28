@@ -1,7 +1,7 @@
 #include <libutil.hpp>
 #include <gtest/gtest.h>
 
-using namespace dvsku;
+using namespace libutil;
 
 TEST(string, format) {
     std::string valid = "Hello, dvsku. January has 31 days.";
@@ -51,7 +51,4 @@ TEST(string, contains) {
 
     EXPECT_TRUE(string::contains(str, "ab"));
     EXPECT_FALSE(string::contains(str, "e"));
-
-    dvsku::uuid abc = 16;
-
 }

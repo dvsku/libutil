@@ -3,14 +3,14 @@
 
 #include <string>
 
-bool dvsku::filesystem::is_sub_path(const std::filesystem::path& path, const std::filesystem::path& sub_path) {
+bool libutil::filesystem::is_sub_path(const std::filesystem::path& path, const std::filesystem::path& sub_path) {
     std::string path_str     = path.string();
     std::string sub_path_str = sub_path.string();
 
     return (path_str.find(sub_path_str) != std::string::npos);
 }
 
-std::filesystem::path dvsku::filesystem::exe_base_find_file(const std::string& file) {
+std::filesystem::path libutil::filesystem::exe_base_find_file(const std::string& file) {
     std::filesystem::path filepath = exe_base_find_file_dir(file);
     if (filepath.empty())
         return std::filesystem::path();
@@ -19,8 +19,8 @@ std::filesystem::path dvsku::filesystem::exe_base_find_file(const std::string& f
     return filepath;
 }
 
-std::filesystem::path dvsku::filesystem::exe_base_find_file_dir(const std::string& file) {
-    std::filesystem::path exe = system::get_executable_file_path();
+std::filesystem::path libutil::filesystem::exe_base_find_file_dir(const std::string& file) {
+    std::filesystem::path exe = libutil::system::get_executable_file_path();
     exe.remove_filename();
 
     if (exe.empty())
@@ -38,6 +38,6 @@ std::filesystem::path dvsku::filesystem::exe_base_find_file_dir(const std::strin
     return std::filesystem::path();
 }
 
-bool dvsku::filesystem::exe_base_exists(const std::string& file) {
+bool libutil::filesystem::exe_base_exists(const std::string& file) {
     return false;
 }

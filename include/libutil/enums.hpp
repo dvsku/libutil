@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace dvsku {
+namespace libutil {
     enum class async_result_status : uint8_t {
         success,
         failure,

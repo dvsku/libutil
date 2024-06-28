@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace dvsku {
+namespace libutil {
     /*
         Meant to be returned from async functions via callbacks.
         Use to better describe the state.

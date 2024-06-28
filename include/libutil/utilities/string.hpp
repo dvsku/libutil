@@ -6,15 +6,15 @@
 #include <string>
 #include <vector>
 
-namespace dvsku::string {
+namespace libutil::string {
     #ifndef DV_FORMAT
     #define DV_FORMAT(frmt, ...)            \
-        dvsku::string::format(frmt, ##__VA_ARGS__)
+        libutil::string::format(frmt, ##__VA_ARGS__)
     #endif
 
     #ifndef DV_FORMAT_TO
     #define DV_FORMAT_TO(str, frmt, ...)    \
-        dvsku::string::format_to(str, frmt, ##__VA_ARGS__)
+        libutil::string::format_to(str, frmt, ##__VA_ARGS__)
     #endif
 
     /*

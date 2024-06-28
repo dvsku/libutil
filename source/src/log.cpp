@@ -10,7 +10,7 @@
 #include <fstream>
 #include <iostream>
 
-using namespace dvsku;
+using namespace libutil;
 
 ///////////////////////////////////////////////////////////////////////////////
 // LOG

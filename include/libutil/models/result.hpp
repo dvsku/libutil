@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-namespace dvsku {
+namespace libutil {
     /*
         Meant to be returned from what would be bool functions.
         Use to better describe the state.

@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <algorithm>
 
-using namespace dvsku;
+using namespace libutil;
 
 static size_t get_line_count(const std::string& str) {
     std::vector<std::string> lines = string::split(str, '\n');

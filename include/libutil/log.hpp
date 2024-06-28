@@ -15,30 +15,30 @@
 
 #ifndef DV_LOG_INFO
 #define DV_LOG_INFO(component, frmt, ...)     \
-        dvsku::log::log_message(dvsku::log::level::informational, component, frmt, ##__VA_ARGS__)
+        libutil::log::log_message(dvsku::log::level::informational, component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_WARN
 #define DV_LOG_WARN(component, frmt, ...)     \
-        dvsku::log::log_message(dvsku::log::level::warning,       component, frmt, ##__VA_ARGS__)
+        libutil::log::log_message(dvsku::log::level::warning,       component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_ERRO
 #define DV_LOG_ERRO(component, frmt, ...)     \
-        dvsku::log::log_message(dvsku::log::level::error,         component, frmt, ##__VA_ARGS__)
+        libutil::log::log_message(dvsku::log::level::error,         component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_VERB
 #define DV_LOG_VERB(component, frmt, ...)     \
-        dvsku::log::log_message(dvsku::log::level::verbose,       component, frmt, ##__VA_ARGS__)
+        libutil::log::log_message(dvsku::log::level::verbose,       component, frmt, ##__VA_ARGS__)
 #endif
 
 #ifndef DV_LOG_DEBG
 #define DV_LOG_DEBG(component, frmt, ...)     \
-        dvsku::log::log_message(dvsku::log::level::debug,         component, frmt, ##__VA_ARGS__)
+        libutil::log::log_message(dvsku::log::level::debug,         component, frmt, ##__VA_ARGS__)
 #endif
 
-namespace dvsku {
+namespace libutil {
     class log {
     public:
         using string_view_t = fmt::string_view;
