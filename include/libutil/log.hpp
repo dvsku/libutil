@@ -44,9 +44,6 @@ namespace dvsku {
         using string_view_t = fmt::string_view;
 
     public:
-        log() = delete;
-
-    public:
         enum class level : unsigned char {
             none          = 0x00,   // does not log
             informational = 0x01,   // logs only info
@@ -94,17 +91,8 @@ namespace dvsku {
             std::string log_files_dir = "logs";
         };
 
-        struct stream {
-            /*
-                Log to stream?
-            */
-            bool enabled = true;
-
-            /*
-                Stream
-            */
-            std::stringstream stream;
-        };
+    public:
+        log() = delete;
 
     public:
         static void init(const log::settings& settings);
@@ -198,6 +186,11 @@ namespace dvsku {
         }
 
     private:
+        struct stream {
+            bool              enabled = true;
+            std::stringstream stream;
+        };
+
         class impl {
         public:
             log::settings                                settings{};
