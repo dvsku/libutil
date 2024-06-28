@@ -1,6 +1,6 @@
 #include "libutil/log.hpp"
-#include "libutil/utilities/util_datetime.hpp"
-#include "libutil/utilities/util_string.hpp"
+#include "libutil/utilities/datetime.hpp"
+#include "libutil/utilities/string.hpp"
 #include "libutil/env/os.hpp"
 
 #ifdef DV_OS_WINDOWS
@@ -123,7 +123,7 @@ void log::impl::log_to_file(const std::string& message) const {
     if (!settings.log_to_file) return;
 
     try {
-        auto localtime = util_datetime::localtime_now();
+        auto localtime = datetime::localtime_now();
 
         std::string filename_format = settings.log_file_name;
         filename_format.append("_");

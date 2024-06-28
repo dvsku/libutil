@@ -1,8 +1,6 @@
-#include "libutil/utilities/util_string.hpp"
+#include "libutil/utilities/string.hpp"
 
-using namespace dvsku;
-
-std::vector<std::string> util_string::split(const std::string str, const char delimiter) {
+std::vector<std::string> dvsku::string::split(const std::string str, const char delimiter) {
     std::vector<std::string> results;
     std::string::size_type   prev_pos = 0;
     std::string::size_type   pos      = 0;
@@ -16,7 +14,7 @@ std::vector<std::string> util_string::split(const std::string str, const char de
     return results;
 }
 
-std::string util_string::trim(const std::string& str, const std::string& to_remove) {
+std::string dvsku::string::trim(const std::string& str, const std::string& to_remove) {
     if (str.empty()) return str;
 
     size_t start = 0;
@@ -32,7 +30,7 @@ std::string util_string::trim(const std::string& str, const std::string& to_remo
     return str.substr(start, end - start);
 }
 
-std::string util_string::replace(const std::string& source, const std::string& what, const std::string& with) {
+std::string dvsku::string::replace(const std::string& source, const std::string& what, const std::string& with) {
     std::string replaced = source;
 
     size_t start = 0;
@@ -44,6 +42,6 @@ std::string util_string::replace(const std::string& source, const std::string& w
     return replaced;
 }
 
-bool util_string::contains(const std::string& haystack, const std::string& needle) {
+bool dvsku::string::contains(const std::string& haystack, const std::string& needle) {
     return haystack.find(needle) != std::string::npos;
 }

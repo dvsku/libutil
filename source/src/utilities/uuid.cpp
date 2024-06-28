@@ -1,11 +1,9 @@
-#include "libutil/utilities/util_uuid.hpp"
+#include "libutil/utilities/uuid.hpp"
 
 #include <uuid.h>
 #include <spookyhash.hpp>
 
-using namespace dvsku;
-
-uuid util_uuid::create() {
+dvsku::uuid dvsku::create_uuid() {
     std::random_device rd;
     auto seed_data = std::array<int, std::mt19937::state_size> {};
     std::generate(std::begin(seed_data), std::end(seed_data), std::ref(rd));
@@ -17,6 +15,6 @@ uuid util_uuid::create() {
     return SpookyHash::Hash64(uuid.data(), uuid.size(), 0xdeadbeef);
 }
 
-uuid util_uuid::create(const std::string& str) {
+dvsku::uuid dvsku::create_uuid(const std::string& str) {
     return SpookyHash::Hash64(str.data(), str.size(), 0xdeadbeef);
 }

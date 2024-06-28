@@ -1,8 +1,8 @@
 #pragma once
 
 #include "libutil/env/assert.hpp"
-#include "libutil/utilities/util_string.hpp"
-#include "libutil/utilities/util_datetime.hpp"
+#include "libutil/utilities/string.hpp"
+#include "libutil/utilities/datetime.hpp"
 
 #include <fmt/format.h>
 #include <fmt/chrono.h>
@@ -164,8 +164,8 @@ namespace dvsku {
             ss << "[";
 
             if (m_impl->settings.log_message_timestamp_format != "") {
-                auto localtime = util_datetime::localtime_now();
-                ss << util_string::format(m_impl->settings.log_message_timestamp_format, localtime);
+                auto localtime = datetime::localtime_now();
+                ss << string::format(m_impl->settings.log_message_timestamp_format, localtime);
                 ss << " ";
             }
 
@@ -173,10 +173,10 @@ namespace dvsku {
             ss << "] ";
 
             if (component != "") {
-                ss << util_string::format("[{}] ", component);
+                ss << string::format("[{}] ", component);
             }
 
-            ss << util_string::format(format, std::forward<Targs>(args)...);
+            ss << string::format(format, std::forward<Targs>(args)...);
             ss << "\n";
 
             std::string message = ss.str();

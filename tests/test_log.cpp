@@ -5,7 +5,7 @@
 using namespace dvsku;
 
 static size_t get_line_count(const std::string& str) {
-    std::vector<std::string> lines = util_string::split(str, '\n');
+    std::vector<std::string> lines = string::split(str, '\n');
 
     lines.erase(std::remove_if(lines.begin(), lines.end(),
         [](const std::string& str) {
@@ -156,7 +156,7 @@ TEST(log, log_file_create) {
     log::init(settings);   
     log::log_message(log::level::informational, "", "");
 
-    auto localtime = util_datetime::localtime_now();
+    auto localtime = datetime::localtime_now();
 
     std::string filename_format = settings.log_file_name;
     filename_format.append("_");
