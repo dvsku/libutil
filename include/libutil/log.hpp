@@ -147,42 +147,45 @@ namespace libutil {
             if (!m_running)                     return;
             if (m_impl->settings.level < level) return;
 
-            std::lock_guard guard(m_mutex);
+            try {
+                std::lock_guard guard(m_mutex);
 
-            bool log_to_streams = false;
-            for (auto& [name, map_stream] : m_impl->streams) {
-                if (map_stream.enabled) {
-                    log_to_streams = true;
-                    break;
+                bool log_to_streams = false;
+                for (auto& [name, map_stream] : m_impl->streams) {
+                    if (map_stream.enabled) {
+                        log_to_streams = true;
+                        break;
+                    }
                 }
+
+                if (!m_impl->settings.log_to_file && !m_impl->settings.log_to_console && !log_to_streams)
+                    return;
+
+                std::stringstream ss;
+                ss << "[";
+
+                if (m_impl->settings.log_message_timestamp_format != "") {
+                    auto localtime = datetime::localtime_now();
+                    ss << string::format(m_impl->settings.log_message_timestamp_format, localtime);
+                    ss << " ";
+                }
+
+                ss << m_prefixes[(uint8_t)level];
+                ss << "] ";
+
+                if (component != "") {
+                    ss << string::format("[{}] ", component);
+                }
+
+                ss << string::format(format, std::forward<Targs>(args)...);
+                ss << "\n";
+
+                std::string message = ss.str();
+
+                m_impl->log_to_file(message);
+                m_impl->log_to_streams(message);
             }
-
-            if (!m_impl->settings.log_to_file && !m_impl->settings.log_to_console && !log_to_streams)
-                return;
-
-            std::stringstream ss;
-            ss << "[";
-
-            if (m_impl->settings.log_message_timestamp_format != "") {
-                auto localtime = datetime::localtime_now();
-                ss << string::format(m_impl->settings.log_message_timestamp_format, localtime);
-                ss << " ";
-            }
-
-            ss << m_prefixes[(uint8_t)level];
-            ss << "] ";
-
-            if (component != "") {
-                ss << string::format("[{}] ", component);
-            }
-
-            ss << string::format(format, std::forward<Targs>(args)...);
-            ss << "\n";
-
-            std::string message = ss.str();
-
-            m_impl->log_to_streams(message);
-            m_impl->log_to_file(message);
+            catch(...) {}
         }
 
     private:
