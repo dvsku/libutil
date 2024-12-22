@@ -10,39 +10,33 @@ bool libutil::filesystem::is_sub_path(const std::filesystem::path& path, const s
     return (path_str.find(sub_path_str) != std::string::npos);
 }
 
-std::filesystem::path libutil::filesystem::exe_dir_find_file(const std::string& file) {
-    std::filesystem::path filepath = exe_dir_find_file_dir(file);
-    if (filepath.empty())
-        return std::filesystem::path();
+std::filesystem::path libutil::filesystem::find_file(const std::filesystem::path& dir, const std::filesystem::path& file) {
+    std::filesystem::path filepath = dir;
+    filepath /= file;
 
-    filepath.append(file);
+    if (!filepath.is_absolute())
+        filepath = std::filesystem::absolute(filepath);
+
+    if (!std::filesystem::exists(filepath) || !std::filesystem::is_regular_file(filepath))
+        return "";
+
     return filepath;
 }
 
-std::filesystem::path libutil::filesystem::exe_dir_find_file_dir(const std::string& file) {
-    std::filesystem::path exe = libutil::system::get_executable_file_path();
-    exe.remove_filename();
-
-    if (exe.empty())
-        return std::filesystem::path();
-
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(exe)) {
+std::filesystem::path libutil::filesystem::find_file_recursive(const std::filesystem::path& dir, const std::filesystem::path& file) {
+    if (dir == "" || file == "")
+        return "";
+    
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(dir)) {
         if (entry.is_regular_file() && entry.path().filename() == file) {
-            std::filesystem::path filedir = entry.path();
-            filedir.remove_filename();
+            std::filesystem::path filepath = entry.path();
 
-            return filedir;
+            if (!filepath.is_absolute())
+                filepath = std::filesystem::absolute(filepath);
+
+            return filepath;
         }
     }
 
-    return std::filesystem::path();
-}
-
-bool libutil::filesystem::exe_dir_file_exists(const std::string& file) {
-    auto filepath = exe_dir_find_file(file);
-    
-    if (filepath.empty())
-        return false;
-
-    return std::filesystem::exists(filepath);
+    return "";
 }
