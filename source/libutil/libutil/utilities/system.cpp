@@ -5,14 +5,30 @@
     #include <windows.h>
 #endif
 
-std::string libutil::system::get_executable_file_path() {
+std::filesystem::path libutil::system::get_executable_path() {
 #ifdef DV_OS_WINDOWS
-    CHAR  filename[1024];
-    DWORD filename_size = RTL_NUMBER_OF(filename);
+    CHAR  full_path[1024];
+    DWORD full_path_size = RTL_NUMBER_OF(full_path);
 
-    if (QueryFullProcessImageNameA(GetCurrentProcess(), 0, filename, &filename_size))
-        return std::string(filename);
+    if (QueryFullProcessImageNameA(GetCurrentProcess(), 0, full_path, &full_path_size)) {
+        std::filesystem::path path = std::filesystem::path(full_path);
+        
+        if (!path.is_absolute())
+            path = std::filesystem::absolute(path);
+
+        return std::filesystem::exists(path) ? path : "";
+    }
 #endif
+    
+    return "";
+}
 
-    return std::string();
+std::filesystem::path libutil::system::get_executable_dir() {
+    std::filesystem::path filepath = get_executable_path();
+    
+    if (filepath == "")
+        return "";
+
+    filepath.remove_filename();
+    return filepath;
 }

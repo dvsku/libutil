@@ -1,7 +1,15 @@
 #pragma once
 
-#include <string>
+#include <filesystem>
 
 namespace libutil::system {
-    std::string get_executable_file_path();
+    /*
+        Get absolute path to current executable file.
+    */
+    std::filesystem::path get_executable_path();
+
+    /*
+        Get absolute path to directory of current executable file.
+    */
+    std::filesystem::path get_executable_dir();
 }
