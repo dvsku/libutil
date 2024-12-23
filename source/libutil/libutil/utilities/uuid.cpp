@@ -3,18 +3,29 @@
 #include <uuid.h>
 #include <spookyhash.hpp>
 
-libutil::uuid libutil::create_uuid() {
-    std::random_device rd;
-    auto seed_data = std::array<int, std::mt19937::state_size> {};
-    std::generate(std::begin(seed_data), std::end(seed_data), std::ref(rd));
-    std::seed_seq seq(std::begin(seed_data), std::end(seed_data));
-    std::mt19937 generator(seq);
-    uuids::uuid_random_generator gen{ generator };
-    
-    auto uuid = gen().as_bytes();
-    return SpookyHash::Hash64(uuid.data(), uuid.size(), 0xdeadbeef);
+libutil::uuid_t libutil::uuid::create(unique_uuid_pred_t pred) {
+    static std::random_device                        random_device = {};
+    static std::array<int, std::mt19937::state_size> seed          = {};
+    uuid_t                                           uuid          = 0;
+
+    do {
+        std::generate(std::begin(seed), std::end(seed), std::ref(random_device));
+
+        auto seed_seq   = std::seed_seq(std::begin(seed), std::end(seed));
+        auto engine     = std::mt19937(seed_seq);
+        auto random_gen = uuids::uuid_random_generator(engine);
+        auto generated  = random_gen().as_bytes();
+
+        uuid = create(generated.data(), generated.size());
+    } while (pred && !pred(uuid));
+
+    return uuid;
 }
 
-libutil::uuid libutil::create_uuid(const std::string& str) {
-    return SpookyHash::Hash64(str.data(), str.size(), 0xdeadbeef);
+libutil::uuid_t libutil::uuid::create(const std::string& str) {
+    return create(str.data(), str.size());
+}
+
+libutil::uuid_t libutil::uuid::create(const void* data, size_t size) {
+    return SpookyHash::Hash64(data, size, 0xdeadbeef);
 }
