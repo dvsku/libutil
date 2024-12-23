@@ -7,3 +7,5 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(eventpp)
+
+SET(EVENTPP_INCLUDES "${eventpp_SOURCE_DIR}/eventpp/include" CACHE INTERNAL "")
