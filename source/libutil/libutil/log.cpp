@@ -1,7 +1,6 @@
 #include "libutil/log.hpp"
 #include "libutil/utilities/datetime.hpp"
 #include "libutil/utilities/string.hpp"
-#include "libutil/env/os.hpp"
 
 #ifdef DV_OS_WINDOWS
     #include <windows.h>

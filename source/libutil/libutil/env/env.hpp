@@ -5,3 +5,9 @@
 #else
     #define DV_OS_UNIX
 #endif
+
+#if !defined(NDEBUG)
+    #define DV_DEBUG
+#else
+    #define DV_RELEASE
+#endif
