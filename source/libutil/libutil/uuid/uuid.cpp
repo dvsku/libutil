@@ -1,4 +1,4 @@
-#include "libutil/utilities/uuid.hpp"
+#include "libutil/uuid/uuid.hpp"
 
 #include <uuid.h>
 #include <spookyhash.hpp>
