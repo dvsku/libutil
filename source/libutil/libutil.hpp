@@ -1,12 +1,24 @@
 #pragma once
 
-#include "libutil/models/result.hpp"
-#include "libutil/models/async_result.hpp"
-
-#include "libutil/log.hpp"
+////////////////////////////////////////////////////////////////////////////////
+// UTILITIES
 
 #include "libutil/utilities/string.hpp"
 #include "libutil/utilities/datetime.hpp"
-#include "libutil/utilities/uuid.hpp"
 #include "libutil/utilities/filesystem.hpp"
 #include "libutil/utilities/system.hpp"
+
+////////////////////////////////////////////////////////////////////////////////
+// UUID
+
+#include "libutil/uuid/uuid.hpp"
+
+////////////////////////////////////////////////////////////////////////////////
+// LOG
+
+#include "libutil/log.hpp"
+
+////////////////////////////////////////////////////////////////////////////////
+// MISC
+
+#include "libutil/misc/result.hpp"
